@@ -48,6 +48,26 @@ const Landing = () => {
           ))}
         </div>
       </motion.div>
+      <motion.div
+        className="landing__featured"
+        initial={{ y: 20, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ amount: 0.3, once: true }}
+      >
+        <h2 className="landing__featured-title">Featured Courses</h2>
+        <p className="landing__featured-description">
+          From beginners to advance, in all industries, we have the right
+          courses just for you and preparing your entire journey for learning
+          and making the most.
+        </p>
+
+        <div className="landing__tags">
+          {['web development', 'enterprise IT', 'frontend development', 'backend development', 'DEVOPS'].map((tag, index) => (
+            <span key={index} className="landing__tag">{tag}</span>
+          ))}
+        </div>
+      </motion.div>
     </motion.div>
   );
 };
