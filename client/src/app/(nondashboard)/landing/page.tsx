@@ -1,14 +1,21 @@
 "use client";
 
+import CourseCardSearch from "@/components/CourseCardSearch";
 import { useCarousel } from "@/hooks/useCarousel";
 import { useGetCoursesQuery } from "@/state/api";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Landing = () => {
   const currentImage = useCarousel({ totalImages: 3 });
   const { data: courses, isLoading, isError } = useGetCoursesQuery({});
+
+  const router = useRouter();
+  const handleCourseClick = (courseId: string) => {
+    router.push(`/search?id=${courseId}`);
+  };
   
   return (
     <motion.div
@@ -91,7 +98,7 @@ const Landing = () => {
                   transition={{ duration: 0.5, delay: index * 0.2 }}
                   viewport={{ amount: 0.3 }}
                 >
-                  
+                  <CourseCardSearch course={course} onClick={() => handleCourseClick(course.courseId)} />
                 </motion.div>
               ))}
         </div>
