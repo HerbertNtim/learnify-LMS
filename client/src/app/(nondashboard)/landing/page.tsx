@@ -91,7 +91,7 @@ const Landing = () => {
                   transition={{ duration: 0.5, delay: index * 0.2 }}
                   viewport={{ amount: 0.3 }}
                 >
-                  testing card
+                  
                 </motion.div>
               ))}
         </div>
