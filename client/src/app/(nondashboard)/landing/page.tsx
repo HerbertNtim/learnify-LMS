@@ -51,6 +51,9 @@ const Landing = () => {
   const handleCourseClick = (courseId: string) => {
     router.push(`/search?id=${courseId}`);
   };
+
+  if (isLoading) return <LoadingSkeleton />;
+  if (isError) return <div className="error">Error Occurred</div>;
   
   return (
     <motion.div
