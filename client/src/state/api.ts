@@ -1,24 +1,31 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createApi,  fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
 
-const customBaseQuery = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: any) => {
-  const baseQuery = fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL })
+const customBaseQuery = async (
+  args: string | FetchArgs,
+  api: BaseQueryApi,
+  extraOptions: any
+) => {
+  const baseQuery = fetchBaseQuery({
+    baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
+  });
 
   try {
     const result: any = await baseQuery(args, api, extraOptions);
 
     if (result.dat) {
-      return result.data = result.data.data; 
+      return (result.data = result.data.data);
     }
 
     return result;
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "An error occurred";
+    const errorMessage =
+      error instanceof Error ? error.message : "An error occurred";
 
-    return { error: { status: "FETCH_ERROR", error:  errorMessage } };
+    return { error: { status: "FETCH_ERROR", error: errorMessage } };
   }
-}
+};
 
 export const api = createApi({
   baseQuery: customBaseQuery,
@@ -32,12 +39,14 @@ export const api = createApi({
           category,
         },
       }),
+
+      transformResponse: (response: { data: Course[] }) => response.data,
       providesTags: ["Courses"],
     }),
     getCourse: build.query<Course, string>({
       query: (id) => `courses/${id}`,
       providesTags: (result, error, id) => [{ type: "Courses", id }],
-    })
+    }),
   }),
 });
 

@@ -1,13 +1,15 @@
 "use client";
 
 import { useCarousel } from "@/hooks/useCarousel";
+import { useGetCoursesQuery } from "@/state/api";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
 const Landing = () => {
   const currentImage = useCarousel({ totalImages: 3 });
-
+  const { data: courses, isLoading, isError } = useGetCoursesQuery({});
+  
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -63,9 +65,35 @@ const Landing = () => {
         </p>
 
         <div className="landing__tags">
-          {['web development', 'enterprise IT', 'frontend development', 'backend development', 'DEVOPS'].map((tag, index) => (
-            <span key={index} className="landing__tag">{tag}</span>
+          {[
+            "web development",
+            "enterprise IT",
+            "frontend development",
+            "backend development",
+            "DEVOPS",
+          ].map((tag, index) => (
+            <span key={index} className="landing__tag">
+              {tag}
+            </span>
           ))}
+        </div>
+
+        {/* COURSES */}
+        <div className="landing__courses">
+          {courses &&
+            courses
+              .slice(0, 4)
+              .map((course, index) => (
+                <motion.div
+                  key={course.courseId}
+                  initial={{ y: 50, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.5, delay: index * 0.2 }}
+                  viewport={{ amount: 0.3 }}
+                >
+                  testing card
+                </motion.div>
+              ))}
         </div>
       </motion.div>
     </motion.div>
