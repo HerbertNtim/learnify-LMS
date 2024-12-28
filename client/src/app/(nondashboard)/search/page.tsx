@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import CourseCardSearch from "@/components/CourseCardSearch"
+import SelectedCourse from "./SelectedCourses"
 
 const Search = () => {
   const searchParams = useSearchParams()
@@ -42,6 +43,13 @@ const Search = () => {
     });
   };
 
+  const handleEnrollNow = (courseId: string) => {
+    router.push(`/checkout?step=1&id=${courseId}&showSignUp=false`, {
+      scroll: false,
+    });
+  };
+
+
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -75,7 +83,10 @@ const Search = () => {
             transition={{ duration: 0.5, delay: 0.5 }}
             className="search__selected-course"
           >
-            
+            <SelectedCourse
+              course={selectedCourse}
+              handleEnrollNow={handleEnrollNow}
+            />
           </motion.div>
         )}
       </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import CourseCardSearch from "@/components/CourseCardSearch";
+import Error from "@/components/Error";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCarousel } from "@/hooks/useCarousel";
 import { useGetCoursesQuery } from "@/state/api";
@@ -53,7 +54,7 @@ const Landing = () => {
   };
 
   if (isLoading) return <LoadingSkeleton />;
-  if (isError) return <div className="error">Error Occurred</div>;
+  if (isError || !courses) return <Error isError={isError} courses={courses} />;
   
   return (
     <motion.div
