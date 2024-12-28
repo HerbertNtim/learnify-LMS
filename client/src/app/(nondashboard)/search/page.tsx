@@ -1,7 +1,9 @@
 "use client"
 
+import Error from "@/components/Error"
 import Loading from "@/components/Loading"
 import { useGetCoursesQuery } from "@/state/api"
+import { AlertTriangle } from "lucide-react"
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -23,8 +25,12 @@ const Search = () => {
     }
   }, [courses, id])
 
-  if(!isLoading) {
+  if(isLoading) {
     return <Loading />
+  }
+
+  if (isError || !courses) {
+    return <Error isError={isError} courses={courses} />
   }
 
   return (
