@@ -1,5 +1,6 @@
 "use client"
 
+import Loading from "@/components/Loading"
 import { useGetCoursesQuery } from "@/state/api"
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -21,6 +22,10 @@ const Search = () => {
       }
     }
   }, [courses, id])
+
+  if(!isLoading) {
+    return <Loading />
+  }
 
   return (
     <div>Search</div>
