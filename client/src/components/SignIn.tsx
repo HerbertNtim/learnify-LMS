@@ -48,7 +48,7 @@ const SignInComponent = () => {
         signUpUrl={signUpUrl}
         forceRedirectUrl={getRedirectUrl()}
         routing='hash'
-        afterSignOutUrl={'/'}
+        afterSignOutUrl='/'
       />
   )
 }
