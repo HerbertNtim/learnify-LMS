@@ -22,7 +22,7 @@ const SignInComponent = () => {
       return "/teacher/courses";
     } 
     
-    return "/student/courses";
+    return "/user/courses";
   };
 
   return (
