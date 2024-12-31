@@ -5,7 +5,7 @@ import React from "react";
 
 const UserProfilePage = () => {
   return (
-    <div className="my-8 flex flex-col items-center"> 
+    <>
       <Header title="Manage Profile" subtitle="View your profile" />
       <UserProfile
         path="/user/profile"
@@ -22,7 +22,7 @@ const UserProfilePage = () => {
           },
         }}
       />
-    </div>
+    </>
   );
 };
 
