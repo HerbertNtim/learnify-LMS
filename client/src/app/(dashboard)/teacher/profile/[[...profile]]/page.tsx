@@ -3,7 +3,7 @@ import { UserProfile } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import React from "react";
 
-const UserProfilePage = () => {
+const TeacherProfilePage = () => {
   return (
     <div className="my-8 flex flex-col items-center">
       <Header title="Manage Profile" subtitle="View your profile" />
@@ -26,4 +26,4 @@ const UserProfilePage = () => {
   );
 };
 
-export default UserProfilePage;
+export default TeacherProfilePage;
