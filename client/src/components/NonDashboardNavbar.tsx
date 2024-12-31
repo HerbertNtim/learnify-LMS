@@ -45,7 +45,7 @@ const NonDashboardNavbar = () => {
             <UserButton appearance={{
                 baseTheme: dark,
                 elements: {
-                  userButtonOuterIdentifier: "text-customgreys-dirtyGrey",
+                  userButtonOuterIdentifier: "text-gray-400 hover:text-white-50",
                   userButtonBox: "scale-90 sm:scale-100",
                 },
               }}
