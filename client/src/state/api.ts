@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
+import { User } from "@clerk/nextjs/server"
 
 const customBaseQuery = async (
   args: string | FetchArgs,
