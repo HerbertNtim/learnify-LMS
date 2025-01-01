@@ -1,7 +1,7 @@
 
 
 import { Request, Response } from 'express';
-import { clerkClient } from '..';
+import { clerkClient } from '../index';
 
 export const updateUser = async (req: Request, res: Response): Promise<void> => {
   const { userId } = req.params;
