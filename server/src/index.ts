@@ -5,10 +5,11 @@ import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import * as dynamoose from 'dynamoose'
-import courseRouter from './routes/courseRoutes'
 import { createClerkClient } from '@clerk/express'
-
 // ROUTE IMPORTS
+import courseRouter from './routes/courseRoutes'
+import userClerkRoute from './routes/userClerkRoutes'
+
 
 // CONFIGURATIONS
 dotenv.config()
@@ -35,9 +36,11 @@ app.use(cors())
 
 // ROUTES
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Hello World! Welcome to LEARNIFY')
 })
-app.use("/courses", courseRouter)
+app.use("/courses", courseRouter);
+app.use("/users/clerk", userClerkRoute);
+
 
 // SERVER
 const port = process.env.PORT || 5000
