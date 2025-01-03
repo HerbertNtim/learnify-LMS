@@ -30,6 +30,7 @@ const customBaseQuery = async (
       const errorData = result.error.data;
       const errorMessage = errorData?.message || result.error.status.toString() || "An error occurred";
       toast.error(`Error: ${errorMessage}`); 
+      return { error: result.error}
     }
 
     const isMutationRequest =
@@ -41,7 +42,7 @@ const customBaseQuery = async (
     }
 
     if (result.data) {
-      return (result.data = result.data.data);
+      (result.data = result.data.data);
     } else if (result.error?.status === 204 || result.meta?.response.status === 204) {
       return {
         data: null,
