@@ -1,3 +1,4 @@
+import { clerkMiddleware } from '@clerk/nextjs/server';
 import express from 'express'
 import dotenv from 'dotenv'
 import bodyParser from 'body-parser'
@@ -5,7 +6,7 @@ import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import * as dynamoose from 'dynamoose'
-import { createClerkClient } from '@clerk/express'
+import { createClerkClient, requireAuth } from '@clerk/express'
 // ROUTE IMPORTS
 import courseRouter from './routes/courseRoutes'
 import userClerkRoute from './routes/userClerkRoutes'
@@ -33,13 +34,14 @@ app.use(morgan('common'))
 app.use(bodyParser.json()) 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors())
+app.use(clerkMiddleware())
 
 // ROUTES
 app.get('/', (req, res) => {
   res.send('Hello World! Welcome to LEARNIFY')
 })
 app.use("/courses", courseRouter);
-app.use("/users/clerk", userClerkRoute);
+app.use("/users/clerk", requireAuth(), userClerkRoute);
 
 
 // SERVER
