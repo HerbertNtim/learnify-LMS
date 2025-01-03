@@ -1,4 +1,3 @@
-import { clerkMiddleware } from '@clerk/nextjs/server';
 import express from 'express'
 import dotenv from 'dotenv'
 import bodyParser from 'body-parser'
@@ -6,7 +5,7 @@ import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import * as dynamoose from 'dynamoose'
-import { createClerkClient, requireAuth } from '@clerk/express'
+import { clerkMiddleware, createClerkClient, requireAuth } from '@clerk/express'
 // ROUTE IMPORTS
 import courseRouter from './routes/courseRoutes'
 import userClerkRoute from './routes/userClerkRoutes'
