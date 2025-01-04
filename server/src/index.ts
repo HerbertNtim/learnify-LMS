@@ -9,6 +9,7 @@ import { clerkMiddleware, createClerkClient, requireAuth } from '@clerk/express'
 // ROUTE IMPORTS
 import courseRouter from './routes/courseRoutes'
 import userClerkRoute from './routes/userClerkRoutes'
+import transactionRoute from './routes/transactionRoute'
 
 
 // CONFIGURATIONS
@@ -41,6 +42,7 @@ app.get('/', (req, res) => {
 })
 app.use("/courses", courseRouter);
 app.use("/users/clerk", requireAuth(), userClerkRoute);
+app.use("/transaction", requireAuth(), transactionRoute);
 
 
 // SERVER
