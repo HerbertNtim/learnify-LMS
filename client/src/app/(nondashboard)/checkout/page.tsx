@@ -1,4 +1,7 @@
+"use client"
+
 import Loading from '@/components/Loading';
+import WizardStepper from '@/components/WizardStepper';
 import { useUser } from '@clerk/nextjs'
 import React from 'react'
 
@@ -23,7 +26,7 @@ const CheckoutWizard = () => {
   }
 
   return (
-    
+    <WizardStepper currentStep={checkoutStep} />
     <div className='checkout'>{renderStep()}</div>
   )
 }
