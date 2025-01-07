@@ -78,6 +78,12 @@ export const api = createApi({
       invalidatesTags: ["Users"],
     }),
 
+    /* 
+    ===============
+    COURSES
+    =============== 
+    */
+
     getCourses: build.query<Course[], { category?: string }>({
       query: ({ category }) => ({
         url: "courses",
@@ -85,8 +91,6 @@ export const api = createApi({
           category,
         },
       }),
-
-      transformResponse: (response: { data: Course[] }) => response.data,
       providesTags: ["Courses"],
     }),
     getCourse: build.query<Course, string>({
