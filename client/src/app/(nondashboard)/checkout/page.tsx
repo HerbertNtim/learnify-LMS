@@ -5,6 +5,7 @@ import WizardStepper from '@/components/WizardStepper';
 import { useCheckoutNavigation } from '@/hooks/useCheckoutNavigation';
 import { useUser } from '@clerk/nextjs'
 import React from 'react'
+import CheckoutDetailsPage from './details';
 
 const CheckoutWizard = () => {
   const { isLoaded } = useUser();
@@ -17,7 +18,7 @@ const CheckoutWizard = () => {
   const renderStep = () => {
     switch (checkoutStep) {
       case 1:
-        return "Details"
+        return <CheckoutDetailsPage />
       case 2:
         return "Payment"
       case 3:

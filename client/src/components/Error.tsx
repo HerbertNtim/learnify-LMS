@@ -3,7 +3,7 @@ import React from 'react'
 
 interface ErrorProps {
   isError: boolean;
-  courses?: Course[]
+  courses?: Course[] | Course
 }
 
 const Error: React.FC<ErrorProps> = ({ isError, courses }) => {
