@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
-import { User } from "@clerk/nextjs/server"
-import { Clerk }  from "@clerk/clerk-js";
+import { User } from "@clerk/nextjs/server";
+import { Clerk } from "@clerk/clerk-js";
 import { toast } from "sonner";
 
 const customBaseQuery = async (
@@ -20,17 +20,20 @@ const customBaseQuery = async (
       }
 
       return headers;
-    }
+    },
   });
 
   try {
     const result: any = await baseQuery(args, api, extraOptions);
 
-    if(result.error) {
+    if (result.error) {
       const errorData = result.error.data;
-      const errorMessage = errorData?.message || result.error.status.toString() || "An error occurred";
-      toast.error(`Error: ${errorMessage}`); 
-      return { error: result.error}
+      const errorMessage =
+        errorData?.message ||
+        result.error.status.toString() ||
+        "An error occurred";
+      toast.error(`Error: ${errorMessage}`);
+      return { error: result.error };
     }
 
     const isMutationRequest =
@@ -42,13 +45,15 @@ const customBaseQuery = async (
     }
 
     if (result.data) {
-      (result.data = result.data.data);
-    } else if (result.error?.status === 204 || result.meta?.response.status === 204) {
+      result.data = result.data.data;
+    } else if (
+      result.error?.status === 204 ||
+      result.meta?.response.status === 204
+    ) {
       return {
         data: null,
       };
     }
-  
 
     return result;
   } catch (error) {
@@ -68,10 +73,16 @@ export const api = createApi({
       query: ({ userId, ...updatedUser }) => ({
         url: `users/clerk/${userId}`,
         method: "PUT",
-        body: updatedUser
+        body: updatedUser,
       }),
-      invalidatesTags: ["Users"]
-    }), 
+      invalidatesTags: ["Users"],
+    }),
+
+    /* 
+    ===============
+    COURSES
+    =============== 
+    */
 
     getCourses: build.query<Course[], { category?: string }>({
       query: ({ category }) => ({
@@ -80,15 +91,27 @@ export const api = createApi({
           category,
         },
       }),
-
-      transformResponse: (response: { data: Course[] }) => response.data,
       providesTags: ["Courses"],
     }),
     getCourse: build.query<Course, string>({
       query: (id) => `courses/${id}`,
       providesTags: (result, error, id) => [{ type: "Courses", id }],
     }),
+
+    /* 
+    ===============
+    TRANSACTIONS
+    =============== 
+    */
+    createStripePaymentIntent: build.mutation<{ clientSecret: string },{ amount: number }> ({
+      query: ({ amount }) => ({
+        url: `/transactions/stripe/payment-intent`,
+        method: "POST",
+        body: { amount },
+      }),
+    }),
   }),
 });
 
-export const { useUpdateUserMutation, useGetCoursesQuery, useGetCourseQuery } = api;
+export const { useUpdateUserMutation, useGetCoursesQuery, useGetCourseQuery, useCreateStripePaymentIntentMutation} =
+  api;
