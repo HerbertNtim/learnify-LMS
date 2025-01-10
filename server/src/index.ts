@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
 })
 app.use("/courses", courseRouter);
 app.use("/users/clerk", requireAuth(), userClerkRoute);
-app.use("/transaction", requireAuth(), transactionRoute);
+app.use("/transactions", requireAuth(), transactionRoute);
 
 
 // SERVER
