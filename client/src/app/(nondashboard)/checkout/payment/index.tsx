@@ -11,14 +11,45 @@ import { useClerk, useUser } from "@clerk/nextjs";
 import CoursePreview from "@/components/CoursePreview";
 import { CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useCreateTransactionMutation } from "@/state/api";
 
 const PaymentPageContent = () => {
   const stripe = useStripe();
   const elements = useElements();
+  const [ createTransaction ] =   useCreateTransactionMutation();
   const { navigateToStep } = useCheckoutNavigation();
   const { course, courseId } = useCurrentCourse();
   const { user } = useUser();
   const { signOUt } = useClerk();
+
+  // Submit transaction
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!stripe || !elements) {
+      return;
+    }
+
+    const result = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: `${process.env.NEXT_PUBLIC_STRIPE_REDIRECT_URL}?id=${courseId}`,
+      },
+      redirect: "if_required",
+    })
+
+    if(result.paymentIntent?.status === "succeeded") {
+      const transactionData: Partial<Transaction> = {
+        transactionId: result.paymentIntent.id,
+        userId: user?.id,
+        courseId: courseId, 
+        paymentProvider: "stripe",
+        amount: course?.price || 0,
+      }
+
+      await createTransaction(transactionData);
+      navigateToStep(3);
+    }
+  }
 
   if (!course) {
     return null;
@@ -36,7 +67,7 @@ const PaymentPageContent = () => {
         <div className="payment__form-container">
           <form
             id="payment-form"
-            // onSubmit={handleSubmit}
+            onSubmit={handleSubmit}
             className="payment__form"
           >
             <div className="payment__content">
