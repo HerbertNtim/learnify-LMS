@@ -79,7 +79,7 @@ export const createTransaction = async (
           completed: false
         }))
       })),
-      lastAccessTimeStamp: new Date().toISOString()
+      lastAccessedTimeStamp: new Date().toISOString()
     })
     await initialProgress.save();
 

@@ -12,6 +12,7 @@ import CoursePreview from "@/components/CoursePreview";
 import { CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCreateTransactionMutation } from "@/state/api";
+import { toast } from "sonner";
 
 const PaymentPageContent = () => {
   const stripe = useStripe();
@@ -20,12 +21,13 @@ const PaymentPageContent = () => {
   const { navigateToStep } = useCheckoutNavigation();
   const { course, courseId } = useCurrentCourse();
   const { user } = useUser();
-  const { signOUt } = useClerk();
+  const { signOut} = useClerk();
 
   // Submit transaction
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!stripe || !elements) {
+      toast.error("Stripe is not initialized");
       return;
     }
 
@@ -49,6 +51,11 @@ const PaymentPageContent = () => {
       await createTransaction(transactionData);
       navigateToStep(3);
     }
+  }
+
+  const handleSignOutAndNavigate = async () => {
+    await signOut();
+    navigateToStep(1);
   }
 
   if (!course) {
@@ -98,6 +105,7 @@ const PaymentPageContent = () => {
       <div className="payment__actions">
         <Button
           className="hover:bg-white-50/10"
+          onClick={handleSignOutAndNavigate}
           variant="outline"
           type="button"
         >
