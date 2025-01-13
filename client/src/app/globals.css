@@ -218,7 +218,7 @@ input[type="color"] {
 }
 
 .completion__action {
-  @apply mt-2 flex justify-center bg-secondary-700 rounded-lg px-4 py-2 hover:bg-secondary-600 cursor-pointer;
+  @apply mt-2 flex justify-center text-black font-semibold bg-secondary-700 rounded-lg px-4 py-2 hover:bg-secondary-600 cursor-pointer;
 }
 
 /* Landing Page */
