@@ -118,6 +118,14 @@ export const api = createApi({
       invalidatesTags: (result, error, { courseId }) => [{ type: "Courses", id: courseId }],
     }),
 
+    deleteCourse: build.mutation<{ message: string }, string>({
+      query: (courseId) => ({
+        url: `courses/${courseId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Courses"],
+    }),
+
     /* 
     ===============
     TRANSACTIONS
@@ -143,5 +151,5 @@ export const api = createApi({
   }),
 });
 
-export const { useUpdateUserMutation, useGetCoursesQuery, useGetCourseQuery, useGetTransactionsQuery, useCreateStripePaymentIntentMutation, useCreateTransactionMutation } =
+export const { useUpdateUserMutation, useGetCoursesQuery, useGetCourseQuery, useCreateCourseMutation, useUpdateCourseMutation, useDeleteCourseMutation, useGetTransactionsQuery, useCreateStripePaymentIntentMutation, useCreateTransactionMutation } =
   api;
