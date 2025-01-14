@@ -1,18 +1,18 @@
-import Stripe from 'stripe'
-import dotenv from 'dotenv'
-import { Request, Response } from 'express'
-import Course from '../models/courseModel'
-import Transaction from '../models/transactionModel'
-import { User } from '@clerk/express'
-import UserCourseProgress from '../models/userCourseProgressModel'
+import Stripe from "stripe";
+import dotenv from "dotenv";
+import { Request, Response } from "express";
+import Course from "../models/courseModel";
+import Transaction from "../models/transactionModel";
+import { User } from "@clerk/express";
+import UserCourseProgress from "../models/userCourseProgressModel";
 
-dotenv.config()
+dotenv.config();
 
 if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('No Stripe secret key found')
+  throw new Error("No Stripe secret key found");
 }
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const createStripePaymentIntent = async (
   req: Request,
@@ -27,23 +27,23 @@ export const createStripePaymentIntent = async (
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
-      currency: 'usd',
+      currency: "usd",
       automatic_payment_methods: {
         enabled: true,
-        allow_redirects: 'never'
+        allow_redirects: "never",
       },
     });
 
     res.json({
-      message:"",
+      message: "",
       data: {
         clientSecret: paymentIntent.client_secret,
-      }
-    })
+      },
+    });
   } catch (error) {
     res.status(500).json({ message: "Error creating payment intent", error });
   }
-}
+};
 
 export const listTransactions = async (
   req: Request,
@@ -52,22 +52,29 @@ export const listTransactions = async (
   const { userId } = req.query;
 
   try {
-    const transactions = userId ? await Transaction.query('userId').eq(userId).exec() : await Transaction.scan().exec();
+    const transactions = userId
+      ? await Transaction.query("userId").eq(userId).exec()
+      : await Transaction.scan().exec();
 
-    res.status(200).json({ message: "Transactions retrieved successfully ", data: transactions });
+    res
+      .status(200)
+      .json({
+        message: "Transactions retrieved successfully ",
+        data: transactions,
+      });
   } catch (error) {
     res.status(500).json({ message: "Error retrieving transactions", error });
   }
 };
 
 export const createTransaction = async (
-  req: Request, 
+  req: Request,
   res: Response
 ): Promise<void> => {
   const { userId, courseId, transactionId, amount, paymentProvider } = req.body;
 
   try {
-    // 1. get course 
+    // 1. get course
     const course = await Course.get(courseId);
 
     // 2. create transaction
@@ -77,8 +84,8 @@ export const createTransaction = async (
       courseId,
       transactionId,
       amount,
-      paymentProvider
-    })
+      paymentProvider,
+    });
     await newTransaction.save();
 
     // 3. create initial course progress
@@ -91,28 +98,26 @@ export const createTransaction = async (
         sectionId: section.sectionId,
         chapters: section.chapters.map((chapter: any) => ({
           chapterId: chapter.chapterId,
-          completed: false
-        }))
+          completed: false,
+        })),
       })),
-      lastAccessedTimeStamp: new Date().toISOString()
-    })
+      lastAccessedTimestamp: new Date().toISOString(),
+    });
     await initialProgress.save();
 
     // 4. add enrollment to relevant course
-    await Course.update(
-      { courseId },
-      { $ADD: { enrollments: [{userId}] } }  
-    )
+    await Course.update({ courseId }, { $ADD: { enrollments: [{ userId }] } });
 
     res.json({
       message: "Purchase Course successfully",
       data: {
         transaction: newTransaction,
-        courseProgress: initialProgress
-      }
-    })
-
+        courseProgress: initialProgress,
+      },
+    });
   } catch (error) {
-    res.status(500).json({ message: "Error creating transaction and enrollment", error });
+    res
+      .status(500)
+      .json({ message: "Error creating transaction and enrollment", error });
   }
-}
+};
