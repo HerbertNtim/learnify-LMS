@@ -5,6 +5,7 @@ import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
 import { User } from "@clerk/nextjs/server";
 import { Clerk } from "@clerk/clerk-js";
 import { toast } from "sonner";
+import { string } from 'zod';
 
 const customBaseQuery = async (
   args: string | FetchArgs,
@@ -93,9 +94,36 @@ export const api = createApi({
       }),
       providesTags: ["Courses"],
     }),
+    
     getCourse: build.query<Course, string>({
       query: (id) => `courses/${id}`,
       providesTags: (result, error, id) => [{ type: "Courses", id }],
+    }),
+
+    createCourse: build.mutation<Course, { teacherId: string, teacherName: string }>({
+      query: (body) => ({
+        url: "courses",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Courses"],
+     }),
+
+    updateCourse: build.mutation<Course, { courseId: string, formData: FormData }>({
+      query: ({ courseId, formData }) => ({
+        url: `courses/${courseId}`,
+        method: "PUT",
+        body: formData,
+      }),
+      invalidatesTags: (result, error, { courseId }) => [{ type: "Courses", id: courseId }],
+    }),
+
+    deleteCourse: build.mutation<{ message: string }, string>({
+      query: (courseId) => ({
+        url: `courses/${courseId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Courses"],
     }),
 
     /* 
@@ -123,5 +151,5 @@ export const api = createApi({
   }),
 });
 
-export const { useUpdateUserMutation, useGetCoursesQuery, useGetCourseQuery, useGetTransactionsQuery, useCreateStripePaymentIntentMutation, useCreateTransactionMutation } =
+export const { useUpdateUserMutation, useGetCoursesQuery, useGetCourseQuery, useCreateCourseMutation, useUpdateCourseMutation, useDeleteCourseMutation, useGetTransactionsQuery, useCreateStripePaymentIntentMutation, useCreateTransactionMutation } =
   api;
