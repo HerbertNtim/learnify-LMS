@@ -1,11 +1,14 @@
+'use client'
+
 import { CustomFormField } from "@/components/CustomFormField"
 import DroppableComponent from "@/components/Droppable"
+import Error from "@/components/Error"
 import Header from "@/components/Header"
 import Loading from "@/components/Loading"
 import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import { courseSchema } from "@/lib/schemas"
-import { centsToDollars, createCourseFormData, uploadAllVideos } from "@/lib/utils"
+import { centsToDollars, createCourseFormData } from "@/lib/utils"
 import { openSectionModal, setSections } from "@/state"
 import { useGetCourseQuery, useUpdateCourseMutation } from "@/state/api"
 import { useAppDispatch, useAppSelector } from "@/state/redux"
@@ -50,24 +53,20 @@ const CourseEditor = () => {
     }
   }, [course, methods]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  if(isError || !course) {
+    return <Error isError={isError} courses={course} />
+  }
 
 
   const onSubmit = async (data: CourseFormData) => {
     try {
-      const updatedSections = await uploadAllVideos(
-        sections,
-        id,
-        getUploadVideoUrl
-      );
-
-      const formData = createCourseFormData(data, updatedSections);
+      const formData = createCourseFormData(data, sections);
 
       await updateCourse({
         courseId: id,
         formData,
       }).unwrap();
 
-      refetch();
     } catch (error) {
       console.error("Failed to update course:", error);
     }
