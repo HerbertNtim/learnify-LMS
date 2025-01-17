@@ -127,7 +127,7 @@ export const deleteCourse = async (req: Request, res: Response): Promise<void> =
 
     await Course.delete(courseId);
 
-    res.status(200).json({ message: "Course deleted successfully "})
+    res.status(200).json({ message: "Course deleted successfully" })
   } catch (error) {
     res.status(500).json({ message: "Error deleting course", error });
   }

@@ -17,6 +17,7 @@ import { ArrowLeft, Plus } from "lucide-react"
 import { useParams, useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 const CourseEditor = () => {
   const router = useRouter()
@@ -68,7 +69,8 @@ const CourseEditor = () => {
       }).unwrap();
 
     } catch (error) {
-      console.error("Failed to update course:", error);
+      toast.error("An error occurred while updating course");
+      console.log(error);
     }
   };
 
