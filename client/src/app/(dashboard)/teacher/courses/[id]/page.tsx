@@ -23,7 +23,7 @@ const CourseEditor = () => {
   const router = useRouter()
   const params = useParams()
   const id = params.id as string
-  const { data: course, isLoading, isError } = useGetCourseQuery(id)
+  const { data: course, isLoading, isError, refetch } = useGetCourseQuery(id)
   const [ updateCourse ] = useUpdateCourseMutation()
   // upload video functionality
 
@@ -62,12 +62,14 @@ const CourseEditor = () => {
   const onSubmit = async (data: CourseFormData) => {
     try {
       const formData = createCourseFormData(data, sections);
+      console.log(formData);
 
       await updateCourse({
         courseId: id,
         formData,
       }).unwrap();
 
+      refetch();
     } catch (error) {
       toast.error("An error occurred while updating course");
       console.log(error);
