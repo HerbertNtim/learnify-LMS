@@ -101,7 +101,7 @@ export const updateCourse = async (req: Request, res: Response): Promise<void> =
     }
 
     Object.assign(course, updateData)
-    await course.save()
+    await Course.save()
 
     res.status(200).json({ message: "Course updated successfully ", data: course })
   } catch (error) {
@@ -127,7 +127,7 @@ export const deleteCourse = async (req: Request, res: Response): Promise<void> =
 
     await Course.delete(courseId);
 
-    res.status(200).json({ message: "Course deleted successfully", data: course })
+    res.status(200).json({ message: "Course deleted successfully "})
   } catch (error) {
     res.status(500).json({ message: "Error deleting course", error });
   }

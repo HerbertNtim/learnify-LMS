@@ -1,6 +1,5 @@
 "use client";
 
-import Error from "@/components/Error";
 import Header from "@/components/Header";
 import Loading from "@/components/Loading";
 import TeacherCourseCard from "@/components/TeacherCourseCard";
@@ -68,7 +67,7 @@ const Courses = () => {
   };
 
   if (isLoading) return <Loading />;
-  if (isError || !courses) return <Error isError={isError} courses={courses} />
+  if (isError || !courses) return <div>Error loading courses.</div>;
 
   return (
     <div className="teacher-courses">
