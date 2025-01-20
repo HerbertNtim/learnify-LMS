@@ -21,3 +21,21 @@ export const getUserEnrolledCourses = async (req: Request, res: Response) => {
     });
   }
 }
+
+export const getUserCourseProgress = async (req: Request, res: Response) => {
+  const { userId, courseId } = req.params;
+
+  try {
+    const progress = await UserCourseProgress.get({ userId, courseId });
+
+    res.status(200).json({
+      message: "Successfully fetched user's course progress",
+      data: progress,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      message: "Failed to fetch user's course progress",
+      error: error.message,
+    });
+  }
+}
