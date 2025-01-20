@@ -157,7 +157,14 @@ export const api = createApi({
       query: (userId) => `users/course-progress/${userId}/enrolled-courses`,
       providesTags: ["Courses", "UserCourseProgress"],
     }),
+
+    getUserCourseProgress: build.query<UserCourseProgress, { userId: string, courseId: string }>({
+      query: ({ userId, courseId }) => `users/course-progress/${userId}/courses/${courseId}`,
+      providesTags: ["UserCourseProgress"],
+    }),
+
+
   }),
 });
 
-export const { useUpdateUserMutation, useGetCoursesQuery, useGetCourseQuery, useCreateCourseMutation, useUpdateCourseMutation, useDeleteCourseMutation, useGetTransactionsQuery, useCreateStripePaymentIntentMutation, useCreateTransactionMutation, useGetUserEnrolledCoursesQuery } = api;
+export const { useUpdateUserMutation, useGetCoursesQuery, useGetCourseQuery, useCreateCourseMutation, useUpdateCourseMutation, useDeleteCourseMutation, useGetTransactionsQuery, useCreateStripePaymentIntentMutation, useCreateTransactionMutation, useGetUserEnrolledCoursesQuery, useGetUserCourseProgressQuery } = api;
