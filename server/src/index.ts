@@ -10,6 +10,7 @@ import { clerkMiddleware, createClerkClient, requireAuth } from '@clerk/express'
 import courseRouter from './routes/courseRoutes'
 import userClerkRoute from './routes/userClerkRoutes'
 import transactionRoute from './routes/transactionRoute'
+import userCourseProgressRoutes from './routes/userCourseProgressRoutes'
 
 
 // CONFIGURATIONS
@@ -43,7 +44,7 @@ app.get('/', (req, res) => {
 app.use("/courses", courseRouter);
 app.use("/users/clerk", requireAuth(), userClerkRoute);
 app.use("/transactions", requireAuth(), transactionRoute);
-
+app.use("/users/course-progress", requireAuth(), userCourseProgressRoutes);
 
 // SERVER
 const port = process.env.PORT || 5000
