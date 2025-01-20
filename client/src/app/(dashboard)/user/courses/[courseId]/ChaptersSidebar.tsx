@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useRef } from "react";
 import {
   ChevronDown,
@@ -11,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { useSidebar } from "@/components/ui/sidebar";
 import Loading from "@/components/Loading";
 import { useCourseProgressData } from "@/hooks/useCourseProgressData";
+import UserError from "@/components/UserError";
 
 const ChaptersSidebar = () => {
   const router = useRouter();
@@ -34,7 +36,8 @@ const ChaptersSidebar = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (isLoading) return <Loading />;
-  if (!user) return <div>Please sign in to view course progress.</div>;
+  if (!user) return <UserError isError={!user} />
+
   if (!course || !userProgress) return <div>Error loading course content</div>;
 
   const toggleSection = (sectionTitle: string) => {
@@ -237,7 +240,6 @@ const Chapter = ({
   sectionId,
   sectionProgress,
   chapterId,
-  courseId,
   handleChapterClick,
   updateChapterProgress,
 }: {

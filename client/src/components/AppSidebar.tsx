@@ -24,6 +24,7 @@ import Loading from "./Loading";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import UserError from "./UserError";
 
 const AppSidebar = () => {
   const { user, isLoaded } = useUser();
@@ -47,7 +48,8 @@ const AppSidebar = () => {
   };
 
   if (!isLoaded) return <Loading />;
-  if (!user) return <div>User not found</div>;
+  if (!user) return <UserError isError={!user} />
+
 
   const userType =
     (user.publicMetadata.userType as "user" | "teacher") || "user";

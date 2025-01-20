@@ -8,6 +8,7 @@ import { useUser } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import ChaptersSidebar from "./user/courses/[courseId]/ChaptersSidebar";
+import UserError from "@/components/UserError";
 export default function DashboardLayout({
   children,
 }: {
@@ -30,7 +31,7 @@ export default function DashboardLayout({
   }, [isCoursePage, pathname]);
 
   if (!isLoaded) return <Loading />;
-  if (!user) return <div>Please sign in to access this page.</div>;
+  if (!user) return <UserError isError={!user} />
 
   return (
     <SidebarProvider>

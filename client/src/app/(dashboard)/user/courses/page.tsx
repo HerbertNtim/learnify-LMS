@@ -8,6 +8,8 @@ import Header from "@/components/Header";
 import { useUser } from "@clerk/nextjs";
 import { useState, useMemo } from "react";
 import Loading from "@/components/Loading";
+import Error from "@/components/Error";
+import UserError from "@/components/UserError";
 
 const Courses = () => {
   const router = useRouter();
@@ -57,9 +59,9 @@ const Courses = () => {
   };
 
   if (!isLoaded || isLoading) return <Loading />;
-  if (!user) return <div>Please sign in to view your courses.</div>;
+  if (!user) return <UserError isError={!user} />;
   if (isError || !courses || courses.length === 0)
-    return <div>You are not enrolled in any courses yet.</div>;
+    return <Error isError={isError} courses={courses} />
 
   return (
     <div className="user-courses">

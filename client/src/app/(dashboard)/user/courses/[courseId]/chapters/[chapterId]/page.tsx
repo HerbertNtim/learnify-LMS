@@ -44,9 +44,9 @@ const Course = () => {
   };
 
   if (isLoading) return <Loading />;
-  if (!user) return <div>Please sign in to view this course.</div>;
-  if (!course || !userProgress) return <Error
-  isError={!userProgress} courses={course} />
+  
+  if (!user || !course || !userProgress)
+    return <Error isError={!userProgress} courses={course} />;
 
   return (
     <div className="course">
