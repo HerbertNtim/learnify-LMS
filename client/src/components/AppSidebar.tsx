@@ -32,7 +32,7 @@ const AppSidebar = () => {
   const { toggleSidebar } = useSidebar();
 
   const navLinks = {
-    student: [
+    user: [
       { icon: BookOpen, label: "Courses", href: "/user/courses" },
       { icon: Briefcase, label: "Billing", href: "/user/billing" },
       { icon: User, label: "Profile", href: "/user/profile" },
@@ -50,7 +50,7 @@ const AppSidebar = () => {
   if (!user) return <div>User not found</div>;
 
   const userType =
-    (user.publicMetadata.userType as "student" | "teacher") || "student";
+    (user.publicMetadata.userType as "user" | "teacher") || "user";
   const currentNavLinks = navLinks[userType];
 
   return (
@@ -86,7 +86,7 @@ const AppSidebar = () => {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu className="app-sidebar__nav-menu">
-          {currentNavLinks.map((link) => {
+          {currentNavLinks && currentNavLinks.map((link) => {
             const isActive = pathname.startsWith(link.href);
             return (
               <SidebarMenuItem
