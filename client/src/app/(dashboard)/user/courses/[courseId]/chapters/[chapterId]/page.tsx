@@ -7,6 +7,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import ReactPlayer from "react-player";
 import Loading from "@/components/Loading";
 import { useCourseProgressData } from "@/hooks/useCourseProgressData";
+import Error from "@/components/Error";
 
 const Course = () => {
   const {
@@ -21,7 +22,6 @@ const Course = () => {
     hasMarkedComplete,
     setHasMarkedComplete,
   } = useCourseProgressData();
-  console.log("currentChapter.video:", currentChapter);
 
   const playerRef = useRef<ReactPlayer>(null);
 
@@ -45,7 +45,8 @@ const Course = () => {
 
   if (isLoading) return <Loading />;
   if (!user) return <div>Please sign in to view this course.</div>;
-  if (!course || !userProgress) return <div>Error loading course</div>;
+  if (!course || !userProgress) return <Error
+  isError={!userProgress} courses={course} />
 
   return (
     <div className="course">
