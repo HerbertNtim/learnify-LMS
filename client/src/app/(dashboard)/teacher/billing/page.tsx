@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import UserError from "@/components/UserError";
 import { formatPrice } from "@/lib/utils";
 import { useGetTransactionsQuery } from "@/state/api";
 import { useUser } from "@clerk/nextjs";
@@ -37,7 +38,7 @@ const TeacherBilling = () => {
     }) || [];
 
   if (!isLoaded) return <Loading />;
-  if (!user) return <div>Please sign in to view your billing information.</div>;
+  if (!user) return <UserError isError={!user} />
 
   return (
     <div className="billing">

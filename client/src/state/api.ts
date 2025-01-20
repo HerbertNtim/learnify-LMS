@@ -5,7 +5,6 @@ import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
 import { User } from "@clerk/nextjs/server";
 import { Clerk } from "@clerk/clerk-js";
 import { toast } from "sonner";
-import { string } from 'zod';
 
 const customBaseQuery = async (
   args: string | FetchArgs,
@@ -68,7 +67,7 @@ const customBaseQuery = async (
 export const api = createApi({
   baseQuery: customBaseQuery,
   reducerPath: "api",
-  tagTypes: ["Courses", "Users"],
+  tagTypes: ["Courses", "Users", "UserCourseProgress"],
   endpoints: (build) => ({
     updateUser: build.mutation<User, Partial<User> & { userId: string }>({
       query: ({ userId, ...updatedUser }) => ({
@@ -147,9 +146,63 @@ export const api = createApi({
         method: "POST",
         body: transaction,
       }),
-    })
+    }),
+
+    /* 
+    ===============
+    USER COURSE PROGRESS
+    =============== 
+    */
+    getUserEnrolledCourses: build.query<Course[], string>({
+      query: (userId) => `users/course-progress/${userId}/enrolled-courses`,
+      providesTags: ["Courses", "UserCourseProgress"],
+    }),
+
+    getUserCourseProgress: build.query<UserCourseProgress, { userId: string, courseId: string }>({
+      query: ({ userId, courseId }) => `users/course-progress/${userId}/courses/${courseId}`,
+      providesTags: ["UserCourseProgress"],
+    }),
+
+    updateUserCourseProgress: build.mutation<
+      UserCourseProgress,
+      {
+        userId: string;
+        courseId: string;
+        progressData: {
+          sections: SectionProgress[];
+        };
+      }
+    >({
+      query: ({ userId, courseId, progressData }) => ({
+        url: `users/course-progress/${userId}/courses/${courseId}`,
+        method: "PUT",
+        body: progressData,
+      }),
+      invalidatesTags: ["UserCourseProgress"],
+      async onQueryStarted(
+        { userId, courseId, progressData },
+        { dispatch, queryFulfilled }
+      ) {
+        const patchResult = dispatch(
+          api.util.updateQueryData(
+            "getUserCourseProgress",
+            { userId, courseId },
+            (draft) => {
+              Object.assign(draft, {
+                ...draft,
+                sections: progressData.sections,
+              });
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+    }),
   }),
 });
 
-export const { useUpdateUserMutation, useGetCoursesQuery, useGetCourseQuery, useCreateCourseMutation, useUpdateCourseMutation, useDeleteCourseMutation, useGetTransactionsQuery, useCreateStripePaymentIntentMutation, useCreateTransactionMutation } =
-  api;
+export const { useUpdateUserMutation, useGetCoursesQuery, useGetCourseQuery, useCreateCourseMutation, useUpdateCourseMutation, useDeleteCourseMutation, useGetTransactionsQuery, useCreateStripePaymentIntentMutation, useCreateTransactionMutation, useGetUserEnrolledCoursesQuery, useGetUserCourseProgressQuery, useUpdateUserCourseProgressMutation } = api;
