@@ -4,7 +4,7 @@ import { getUserCourseProgress, getUserEnrolledCourses, updateUserCourseProgress
 const userCourseProgressRoutes = express.Router();
 
 userCourseProgressRoutes.get('/:userId/enrolled-courses', getUserEnrolledCourses)
-userCourseProgressRoutes.post('/:userId/courses/:courseId', getUserCourseProgress)
+userCourseProgressRoutes.get('/:userId/courses/:courseId', getUserCourseProgress)
 userCourseProgressRoutes.put('/:userId/courses/:courseId', updateUserCourseProgress)
 
 export default userCourseProgressRoutes;
