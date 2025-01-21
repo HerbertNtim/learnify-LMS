@@ -19,7 +19,7 @@ const UserError: React.FC<ErrorProps> = ({ isError}) => {
           onClick={() => window.location.reload()}
           className="mt-6 px-8 py-4 bg-blue-500 font-semibold text-2xl text-white rounded-md hover:bg-blue-600 transition duration-200"
         >
-          <Link className="text-white" href="/signin">Log in</Link>
+          <Link className="text-white" href="/signin" scroll={false}>Log in</Link>
         </Button>
       </div>
     );
