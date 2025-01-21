@@ -11,6 +11,8 @@ import courseRouter from './routes/courseRoutes'
 import userClerkRoute from './routes/userClerkRoutes'
 import transactionRoute from './routes/transactionRoute'
 import userCourseProgressRoutes from './routes/userCourseProgressRoutes'
+import Serverless from 'serverless-http'
+import seed from './seed/seedDynamodb'
 
 
 // CONFIGURATIONS
@@ -52,4 +54,18 @@ if(!isProduction) {
   app.listen(port, () => {
     console.log(`Server running on port: ${port}`)
   })
+}
+
+// aws production environment
+const serverlessApp = Serverless(app);
+export const handler = async (event: any, context: any) => {
+  if (event.action === 'seed') {
+    await seed();
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ message: 'Seeding complete' }),
+    }
+  } else {
+    return serverlessApp(event, context);
+  }
 }
