@@ -8,9 +8,9 @@ import Loading from "@/components/Loading"
 import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import { courseSchema } from "@/lib/schemas"
-import { centsToDollars, createCourseFormData } from "@/lib/utils"
+import { centsToDollars, createCourseFormData, uploadAllVideos } from "@/lib/utils"
 import { openSectionModal, setSections } from "@/state"
-import { useGetCourseQuery, useUpdateCourseMutation } from "@/state/api"
+import { useGetCourseQuery, useGetUploadVideoUrlMutation, useUpdateCourseMutation } from "@/state/api"
 import { useAppDispatch, useAppSelector } from "@/state/redux"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ArrowLeft, Plus } from "lucide-react"
@@ -24,7 +24,7 @@ const CourseEditor = () => {
   const id = params.id as string
   const { data: course, isLoading, isError } = useGetCourseQuery(id)
   const [ updateCourse ] = useUpdateCourseMutation()
-  // upload video functionality
+  const [ getUploadVideoUrl ] = useGetUploadVideoUrlMutation()
 
   const dispatch = useAppDispatch()
   const { sections } = useAppSelector(state => state.global.courseEditor)
@@ -60,7 +60,13 @@ const CourseEditor = () => {
 
   const onSubmit = async (data: CourseFormData) => {
     try {
-      const formData = createCourseFormData(data, sections);
+      const updatedSections = await uploadAllVideos(
+        sections,
+        id,
+        getUploadVideoUrl,
+      )
+
+      const formData = createCourseFormData(data, updatedSections);
 
       await updateCourse({
         courseId: id,
