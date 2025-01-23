@@ -61,7 +61,7 @@ const Courses = () => {
   if (!isLoaded || isLoading) return <Loading />;
   if (!user) return <UserError isError={!user} />;
   if (isError || !courses || courses.length === 0)
-    return <Error isError={isError} courses={courses} title="U have not enrolled in any course" />
+    return <Error isError={isError} courses={courses} title="You have not enrolled in any course" />
 
   return (
     <div className="user-courses">

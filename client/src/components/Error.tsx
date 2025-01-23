@@ -20,7 +20,7 @@ const Error: React.FC<ErrorProps> = ({ isError, courses, title }) => {
         <p className="text-gray-400 mt-2 text-center text-lg">
           {title || "Something went wrong while loading the courses. Please check your internet connection or try again later"}.
         </p>
-        <div>
+        <div className='flex flex-col items-center justify-center'>
           {title ? (
             <Link href="/search" className="mt-6 px-8 py-4 bg-blue-500 font-semibold text-2xl text-white rounded-md hover:bg-blue-600 transition duration-200">Search Courses</Link>
           ) : (
