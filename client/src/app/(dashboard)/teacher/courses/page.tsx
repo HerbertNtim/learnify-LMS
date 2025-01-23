@@ -68,7 +68,7 @@ const Courses = () => {
   };
 
   if (isLoading) return <Loading />;
-  if (isError || !courses) return <Error isError={isError} courses={courses} />;
+  if (isError ) return <Error isError={isError}  />;
 
   return (
     <div className="teacher-courses">
