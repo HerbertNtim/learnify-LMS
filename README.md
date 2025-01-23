@@ -25,9 +25,9 @@ A comprehensive Learning Management System (LMS) designed for managing course co
 
 ### Frontend User Interface
 
-![Frontend Screenshot](./screenshots/frontend.png)
+![Frontend Screenshot](https://github.com/HerbertNtim/learnify-LMS/blob/main/client/public/learnify.png)
 
-[**Live Demo**](https://your-demo-link.com)
+[**Live Demo**](https://learnify-a1onyhgkl-herbertntims-projects.vercel.app/)
 
 ---
 
