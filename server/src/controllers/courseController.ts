@@ -104,11 +104,11 @@ export const updateCourse = async (req: Request, res: Response): Promise<void> =
     }
 
     Object.assign(course, updateData)
-    await Course.save()
+    await course.save()
 
     res.status(200).json({ message: "Course updated successfully ", data: course })
-  } catch (error) {
-    res.status(500).json({ message: "Error updating course", error });
+  } catch (error: any) {
+    res.status(500).json({ message: "Error updating course", error: error.message });
   }
 }
 
