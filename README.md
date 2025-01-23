@@ -6,18 +6,20 @@ A comprehensive Learning Management System (LMS) designed for managing course co
 
 ---
 
+
 ## ✨ Features
 
 - **User Authentication:** Secure and scalable authentication with Clerk.
 - **Dynamic Drag-and-Drop Interface:** Organize course modules with a smooth drag-and-drop UI.
-- **Rich Media Support:** Upload and manage files, videos, and images using FilePond.
+- **Rich Media Support:** Upload and manage files, videos, and images using FilePond and AWS S3.
 - **Elegant UI Components:** Pre-styled components using Shadcn and Radix UI for consistent design.
 - **Lucide Icons:** Beautiful and customizable icons for enhancing the user experience.
 - **Data Visualization:** Interactive charts and visual aids for reporting and insights.
-- **Theming Support:** Light and dark modes enabled using `next-themes`.
-- **Backend Scalability:** Serverless architecture with AWS DynamoDB for fast and reliable data handling.
+- **Scalable Backend:** Serverless architecture using AWS Lambda, DynamoDB, and API Gateway.
 - **Payment Integration:** Stripe integration for seamless payment processing.
 - **Form Validation:** Robust and type-safe form validation using React Hook Form and Zod.
+- **Deployment:** Scalable and secure deployment using AWS services and Docker.
+
 
 ---
 
@@ -29,7 +31,18 @@ A comprehensive Learning Management System (LMS) designed for managing course co
 
 [**Live Demo**](https://learnify-a1onyhgkl-herbertntims-projects.vercel.app/)
 
----
+
+## 🌐 Deployed Infrastructure
+
+The LMS project is deployed using AWS services for scalability, reliability, and performance:
+
+- **[AWS Lambda](https://aws.amazon.com/lambda/):** Serverless compute for executing backend functions.
+- **[AWS DynamoDB](https://aws.amazon.com/dynamodb/):** NoSQL database for fast and reliable data storage.
+- **[AWS S3](https://aws.amazon.com/s3/):** File storage for images, videos, and other media.
+- **[AWS CloudFront](https://aws.amazon.com/cloudfront/):** CDN for low-latency content delivery.
+- **[AWS API Gateway](https://aws.amazon.com/api-gateway/):** API management for backend endpoints.
+- **[Docker](https://www.docker.com/):** Containerization for easy and consistent deployment.
+
 
 ## 📦 Frontend Dependencies
 
