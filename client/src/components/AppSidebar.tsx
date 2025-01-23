@@ -15,6 +15,7 @@ import {
   BookOpen,
   Briefcase,
   DollarSign,
+  House,
   LogOut,
   PanelLeft,
   Settings,
@@ -34,12 +35,14 @@ const AppSidebar = () => {
 
   const navLinks = {
     user: [
+      { icon: House, label: "Home", href: "/" },
       { icon: BookOpen, label: "Courses", href: "/user/courses" },
       { icon: Briefcase, label: "Billing", href: "/user/billing" },
       { icon: User, label: "Profile", href: "/user/profile" },
       { icon: Settings, label: "Settings", href: "/user/settings" },
     ],
     teacher: [
+      { icon: House, label: "Home", href: "/" },
       { icon: BookOpen, label: "Courses", href: "/teacher/courses" },
       { icon: DollarSign, label: "Billing", href: "/teacher/billing" },
       { icon: User, label: "Profile", href: "/teacher/profile" },
@@ -90,12 +93,14 @@ const AppSidebar = () => {
         <SidebarMenu className="app-sidebar__nav-menu">
           {currentNavLinks && currentNavLinks.map((link) => {
             const isActive = pathname.startsWith(link.href);
+            const isHome = link. href === "/" &&  link.label === "Home";
+
             return (
               <SidebarMenuItem
                 key={link.href}
                 className={cn(
                   "app-sidebar__nav-item",
-                  isActive && "bg-gray-800"
+                  isHome ? !isActive : isActive && "bg-gray-800"
                 )}
               >
                 <SidebarMenuButton
@@ -124,7 +129,7 @@ const AppSidebar = () => {
                     </span>
                   </Link>
                 </SidebarMenuButton>
-                {isActive && <div className="app-sidebar__active-indicator" />}
+                {isHome ? !isActive : isActive && <div className="app-sidebar__active-indicator" />}
               </SidebarMenuItem>
             );
           })}
