@@ -150,7 +150,7 @@ export const api = createApi({
     }),
     createTransaction: build.mutation<Transaction, Partial<Transaction>>({
       query: (transaction) => ({
-        url: "transactions",
+        url: "/transactions",
         method: "POST",
         body: transaction,
       }),

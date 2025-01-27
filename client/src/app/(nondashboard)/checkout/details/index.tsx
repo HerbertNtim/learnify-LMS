@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form";
 const CheckoutDetailsPage = () => {
   const { course: selectedCourse, isLoading, isError } = useCurrentCourse();
   const searchParam = useSearchParams();
-  const showSignUp = searchParam.get("signup") === "true";
+  const showSignUp = searchParam.get("showSignUp") === "true";
 
   // GUEST FORM
   const methods = useForm<GuestFormData>({

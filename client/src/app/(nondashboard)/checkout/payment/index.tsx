@@ -17,11 +17,11 @@ import { toast } from "sonner";
 const PaymentPageContent = () => {
   const stripe = useStripe();
   const elements = useElements();
-  const [ createTransaction ] =   useCreateTransactionMutation();
+  const [createTransaction] = useCreateTransactionMutation();
   const { navigateToStep } = useCheckoutNavigation();
   const { course, courseId } = useCurrentCourse();
   const { user } = useUser();
-  const { signOut} = useClerk();
+  const { signOut } = useClerk();
 
   // Submit transaction
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,34 +31,46 @@ const PaymentPageContent = () => {
       return;
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_LOCAL_URL ?  `http://${process.env.NEXT_PUBLIC_LOCAL_URL}` : process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : undefined;
+    const baseUrl = process.env.NEXT_PUBLIC_LOCAL_URL
+      ? `${process.env.NEXT_PUBLIC_LOCAL_URL}`
+      : process.env.NEXT_PUBLIC_VERCEL_URL
+        ? `${process.env.NEXT_PUBLIC_VERCEL_URL}`
+        : undefined;
+
+    if (!baseUrl) {
+      throw new Error(
+        "Base URL is not defined. Check your environment variables."
+      );
+    }
+
+    const returnUrl = `${baseUrl}/checkout?step=3&id=${courseId}`
 
     const result = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${baseUrl}/checkout?step=3&id=${courseId}`,
+        return_url: returnUrl, // Ensure this URL is valid and accessible
       },
       redirect: "if_required",
-    })
+    });
 
-    if(result.paymentIntent?.status === "succeeded") {
+    if (result.paymentIntent?.status === "succeeded") {
       const transactionData: Partial<Transaction> = {
         transactionId: result.paymentIntent.id,
         userId: user?.id,
-        courseId: courseId, 
+        courseId: courseId,
         paymentProvider: "stripe",
         amount: course?.price || 0,
-      }
+      };
 
       await createTransaction(transactionData);
       navigateToStep(3);
     }
-  }
+  };
 
   const handleSignOutAndNavigate = async () => {
     await signOut();
     navigateToStep(1);
-  }
+  };
 
   if (!course) {
     return null;
