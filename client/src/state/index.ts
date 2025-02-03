@@ -24,6 +24,7 @@ export const globalSlice = createSlice({
   name: "global",
   initialState,
   reducers: {
+    // the Payload is used to replace already there information
     setSections: (state, action: PayloadAction<Section[]>) => {
       state.courseEditor.sections = action.payload;
     },

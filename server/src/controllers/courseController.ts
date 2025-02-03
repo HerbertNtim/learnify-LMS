@@ -83,7 +83,7 @@ export const updateCourse = async (req: Request, res: Response): Promise<void> =
       const price = parseInt(updateData.price);
 
       if(isNaN(price)) {
-        res.status(400).json({ message: "Price should be a number" })
+        res.status(400).json({ message: "Invalid price format", error: "Price should be a number" })
         return;
       }
 

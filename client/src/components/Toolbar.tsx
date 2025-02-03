@@ -8,7 +8,13 @@ import {
 } from "@/components/ui/select";
 import { courseCategories } from "@/lib/utils";
 
-const Toolbar = ({ onSearch, onCategoryChange }: ToolbarProps) => {
+/*************  ✨ Codeium Command ⭐  *************/
+/**
+ * A toolbar component with search bar and dropdown select for categories.
+ *
+ * @param {ToolbarProps} props The props for the toolbar component.
+ * @prop {Function} onSearch Called when the search bar is changed.
+/******  cbc29356-48f1-4604-8e5d-e59962e6b24f  *******/const Toolbar = ({ onSearch, onCategoryChange }: ToolbarProps) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (value: string) => {
