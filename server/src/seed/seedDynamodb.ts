@@ -22,7 +22,7 @@ if (!isProduction) {
   dynamoose.aws.ddb.local();
   client = new DynamoDBClient({
     endpoint: "http://localhost:8000",
-    region: "us-east-2",
+    region: "us-east-1",
     credentials: {
       accessKeyId: "dummyKey123",
       secretAccessKey: "dummyKey123",
@@ -30,7 +30,7 @@ if (!isProduction) {
   });
 } else {
   client = new DynamoDBClient({
-    region: process.env.AWS_REGION || "us-east-2",
+    region: process.env.AWS_REGION || "us-east-1",
   });
 }
 
@@ -93,13 +93,13 @@ async function seedData(tableName: string, filePath: string) {
   }
 
   console.log(
-    "\x1b[32m%s\x1b[0m",
     `Successfully seeded data to table: ${formattedTableName}`
   );
 }
 
 async function deleteTable(baseTableName: string) {
   let deleteCommand = new DeleteTableCommand({ TableName: baseTableName });
+  console.log(`Deleting table: ${baseTableName}`);
   try {
     await client.send(deleteCommand);
     console.log(`Table deleted: ${baseTableName}`);
