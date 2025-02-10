@@ -1,4 +1,4 @@
-# Use the AWS Lambda Node.js 20 base image
+# Use the AWS Lambda Node.js 20 base image for building
 FROM public.ecr.aws/lambda/nodejs:20 AS build
 
 # Set the working directory
@@ -10,14 +10,17 @@ COPY package*.json ./
 # Install dependencies (including dev dependencies for building)
 RUN npm install
 
-# Copy the rest of your application's source code
+# Copy the rest of the application's source code
 COPY . .
 
 # Build TypeScript files
 RUN npm run build
 
-# Remove dev dependencies
-RUN npm prune --production
+# Remove dev dependencies and optimize final image size
+RUN rm -rf node_modules && npm ci --omit=dev
+
+# Ensure the seed data directory exists
+RUN mkdir -p /var/task/seed/data
 
 # Use a second stage to prepare the production image
 FROM public.ecr.aws/lambda/nodejs:20
@@ -32,8 +35,11 @@ COPY --from=build /app/node_modules ${LAMBDA_TASK_ROOT}/node_modules
 # Copy package.json (optional)
 COPY --from=build /app/package*.json ${LAMBDA_TASK_ROOT}
 
+# Ensure the seed data directory exists
+RUN mkdir -p ${LAMBDA_TASK_ROOT}/seed/data
+
 # Set environment variables (adjust as needed)
 ENV NODE_ENV=production
 
 # Command to start the Lambda function
-CMD ["index.handler"]
+CMD ["dist/src/index.handler"]
