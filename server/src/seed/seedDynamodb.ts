@@ -22,7 +22,7 @@ if (!isProduction) {
   dynamoose.aws.ddb.local();
   client = new DynamoDBClient({
     endpoint: "http://localhost:8000",
-    region: "us-east-1",
+    region: "us-east-2",
     credentials: {
       accessKeyId: "dummyKey123",
       secretAccessKey: "dummyKey123",
@@ -30,7 +30,7 @@ if (!isProduction) {
   });
 } else {
   client = new DynamoDBClient({
-    region: process.env.AWS_REGION || "us-east-1",
+    region: process.env.AWS_REGION || "us-east-2",
   });
 }
 
@@ -57,32 +57,15 @@ async function createTables() {
     });
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       await table.initialize();
       console.log(`Table created and initialized: ${tableName}`);
     } catch (error: any) {
-      if (error.message.includes("Setup flow is already running")) {
-        console.log(`Waiting for setup flow to complete for ${tableName}`);
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        // Try again after waiting
-        try {
-          await table.initialize();
-          console.log(
-            `Table created and initialized after retry: ${tableName}`
-          );
-        } catch (retryError: any) {
-          console.error(
-            `Error creating table ${tableName} after retry:`,
-            retryError.message
-          );
-        }
-      } else {
-        console.error(
-          `Error creating table ${tableName}:`,
-          error.message,
-          error.stack
-        );
-      }
+      console.error(
+        `Error creating table ${tableName}:`,
+        error.message,
+        error.stack
+      );
     }
   }
 }
@@ -142,46 +125,19 @@ async function deleteAllTables() {
 }
 
 export default async function seed() {
-  try {
-    await deleteAllTables();
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    await createTables();
+  await deleteAllTables();
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await createTables();
 
-    const seedDataPath = path.join(__dirname, "./data");
-    if (!fs.existsSync(seedDataPath)) {
-      throw new Error(`Data directory not found at: ${seedDataPath}`);
-    }
+  const seedDataPath = path.join(__dirname, "./data");
+  const files = fs
+    .readdirSync(seedDataPath)
+    .filter((file) => file.endsWith(".json"));
 
-    const files = fs
-      .readdirSync(seedDataPath)
-      .filter((file) => file.endsWith(".json"));
-
-    if (files.length === 0) {
-      console.warn("No JSON files found in the data directory");
-      return;
-    }
-
-    for (const file of files) {
-      const tableName = path.basename(file, ".json");
-      const filePath = path.join(seedDataPath, file);
-
-      // Verify file exists before attempting to read
-      if (!fs.existsSync(filePath)) {
-        console.error(`File not found: ${filePath}`);
-        continue;
-      }
-
-      await seedData(tableName, filePath);
-
-      // Add delay between seeding different tables
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    }
-
-    console.log("Seeding completed successfully");
-  } catch (error: any) {
-    console.error("Seed script failed:", error.message);
-    console.error("Error stack:", error.stack);
-    throw error;
+  for (const file of files) {
+    const tableName = path.basename(file, ".json");
+    const filePath = path.join(seedDataPath, file);
+    await seedData(tableName, filePath);
   }
 }
 
