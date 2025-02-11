@@ -1,12 +1,13 @@
-import Link from "next/link";
 import React from "react";
 
 const Footer = () => {
+  const getYear = new Date().getFullYear();
+
   return (
     <div className="footer">
-      <p>&copy; 2024 LEARNIFY. All Rights Reserved.</p>
+      <p>&copy; {getYear} LEARNIFY. All Rights Reserved.</p>
       <div className="footer__links">
-        {["About", "Privacy Policy", "Licensing", "Contact"].map((item) => (
+        {/* {["About", "Privacy Policy", "Licensing", "Contact"].map((item) => (
           <Link
             key={item}
             href={`/${item.toLowerCase().replace(" ", "-")}`}
@@ -15,7 +16,7 @@ const Footer = () => {
           >
             {item}
           </Link>
-        ))}
+        ))} */}
       </div>
     </div>
   );
