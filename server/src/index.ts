@@ -59,7 +59,7 @@ if(!isProduction) {
 // aws production environment
 const serverlessApp = Serverless(app);
 export const handler = async (event: any, context: any) => {
-  if (event.action === 'seed') {
+  if (event.action === "seed") {
     await seed();
     return {
       statusCode: 200,

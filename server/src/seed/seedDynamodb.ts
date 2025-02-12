@@ -34,10 +34,12 @@ if (!isProduction) {
   });
 }
 
-/* Suppress DynamoDB Tag Warnings */
+/* DynamoDB Suppress Tag Warnings */
 const originalWarn = console.warn.bind(console);
 console.warn = (message, ...args) => {
-  if (!message.includes("Tagging is not currently supported in DynamoDB Local")) {
+  if (
+    !message.includes("Tagging is not currently supported in DynamoDB Local")
+  ) {
     originalWarn(message, ...args);
   }
 };
@@ -57,44 +59,55 @@ async function createTables() {
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       await table.initialize();
-      console.log(`✅ Table created and initialized: ${tableName}`);
+      console.log(`Table created and initialized: ${tableName}`);
     } catch (error: any) {
-      console.error(`❌ Error creating table ${tableName}:`, error.message, error.stack);
+      console.error(
+        `Error creating table ${tableName}:`,
+        error.message,
+        error.stack
+      );
     }
   }
 }
 
 async function seedData(tableName: string, filePath: string) {
-  const data: { [key: string]: any }[] = JSON.parse(fs.readFileSync(filePath, "utf8"));
+  const data: { [key: string]: any }[] = JSON.parse(
+    fs.readFileSync(filePath, "utf8")
+  );
 
   const formattedTableName = pluralize.singular(
     tableName.charAt(0).toUpperCase() + tableName.slice(1)
   );
 
-  console.log(`🌱 Seeding data to table: ${formattedTableName}`);
+  console.log(`Seeding data to table: ${formattedTableName}`);
 
   for (const item of data) {
     try {
       await dynamoose.model(formattedTableName).create(item);
     } catch (err) {
-      console.error(`❌ Unable to add item to ${formattedTableName}. Error:`, JSON.stringify(err, null, 2));
+      console.error(
+        `Unable to add item to ${formattedTableName}. Error:`,
+        JSON.stringify(err, null, 2)
+      );
     }
   }
 
-  console.log(`✅ Successfully seeded data to table: ${formattedTableName}`);
+  console.log(
+    "\x1b[32m%s\x1b[0m",
+    `Successfully seeded data to table: ${formattedTableName}`
+  );
 }
 
 async function deleteTable(baseTableName: string) {
   let deleteCommand = new DeleteTableCommand({ TableName: baseTableName });
-  console.log(`🗑️ Deleting table: ${baseTableName}`);
   try {
     await client.send(deleteCommand);
-    console.log(`✅ Table deleted: ${baseTableName}`);
+    console.log(`Table deleted: ${baseTableName}`);
   } catch (err: any) {
     if (err.name === "ResourceNotFoundException") {
-      console.log(`⚠️ Table does not exist: ${baseTableName}`);
+      console.log(`Table does not exist: ${baseTableName}`);
     } else {
-      console.error(`❌ Error deleting table ${baseTableName}:`, err);
+      console.error(`Error deleting table ${baseTableName}:`, err);
     }
   }
 }
@@ -116,36 +129,21 @@ export default async function seed() {
   await new Promise((resolve) => setTimeout(resolve, 1000));
   await createTables();
 
-  // ✅ Ensure the `data` directory exists before reading it
-  const seedDataPath = path.resolve(__dirname, "./data");
-
-  if (!fs.existsSync(seedDataPath)) {
-    console.log(`⚠️ Data directory not found. Creating: ${seedDataPath}`);
-    fs.mkdirSync(seedDataPath, { recursive: true });
-  }
-
-  // ✅ Debugging: Print directory contents
-  console.log(`📂 Checking seed data directory: ${seedDataPath}`);
-  const existingFiles = fs.readdirSync(path.dirname(seedDataPath));
-  console.log(`📌 Available files in directory:`, existingFiles);
-
-  const files = fs.readdirSync(seedDataPath).filter((file) => file.endsWith(".json"));
-
-  if (files.length === 0) {
-    console.warn("⚠️ No JSON files found in the seed data directory.");
-    return;
-  }
+  const seedDataPath = path.join(__dirname, "./data");
+  const files = fs
+    .readdirSync(seedDataPath)
+    .filter((file) => file.endsWith(".json"));
 
   for (const file of files) {
+    console.log(`Seeding data from file: ${file}`);
     const tableName = path.basename(file, ".json");
     const filePath = path.join(seedDataPath, file);
-    console.log(`📄 Found seed file: ${filePath}`);
     await seedData(tableName, filePath);
   }
 }
 
 if (require.main === module) {
   seed().catch((error) => {
-    console.error("❌ Failed to run seed script:", error);
+    console.error("Failed to run seed script:", error);
   });
 }
