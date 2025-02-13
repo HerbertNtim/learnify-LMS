@@ -63,8 +63,8 @@ export const handler = async (event: any, context: any) => {
     await seed();
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: 'Seeding complete' }),
-    }
+      body: JSON.stringify({ message: "Data seeded successfully" }),
+    };
   } else {
     return serverlessApp(event, context);
   }
