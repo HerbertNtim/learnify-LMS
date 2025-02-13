@@ -16,6 +16,9 @@ COPY . .
 # Ensure the seed/data directory is included
 RUN mkdir -p /app/seed/data
 
+# Copy the seed data
+COPY seed/data /var/task/seed/data
+
 # Build TypeScript files
 RUN npm run build
 
