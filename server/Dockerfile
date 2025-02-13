@@ -17,7 +17,7 @@ COPY . .
 RUN mkdir -p /app/seed/data
 
 # Copy the seed data
-COPY seed/data /var/task/seed/data
+COPY src/seed/data /var/task/seed/data
 
 # Build TypeScript files
 RUN npm run build
@@ -37,6 +37,10 @@ COPY --from=build /app/node_modules ${LAMBDA_TASK_ROOT}/node_modules
 
 # Copy package.json (optional)
 COPY --from=build /app/package*.json ${LAMBDA_TASK_ROOT}
+
+# Copy seed data from src
+COPY --from=build /app/src/seed /var/task/seed
+
 
 # Set environment variables (adjust as needed)
 ENV NODE_ENV=production
