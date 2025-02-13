@@ -13,6 +13,9 @@ RUN npm install
 # Copy the rest of your application's source code
 COPY . .
 
+# Ensure the seed/data directory is included
+RUN mkdir -p /app/seed/data
+
 # Build TypeScript files
 RUN npm run build
 
